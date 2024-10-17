@@ -1,42 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Udit Jadon</title>
-    <script language="javascript">
-        function formValidator() {
-            var username = document.getElementById('uname');
-            var password = document.getElementById('pwd');
-            if (isEmpty(username) && isEmpty(password)) {
-                alert("enter something");
-                document.form1.uname.focus();
-            }
-            if (!isEmpty(username) && isEmpty(password) && isAlphabet(username)) {
-                alert("Please enter password");
-                document.form1.pwd.focus();
-            }
-            if (!isEmpty(username) && !isEmpty(password) && isAlphabet(username)) {
-                return true;
-            }
-            else {
-                if (!isEmpty(username) && !isEmpty(password) && !isAlphabet(username)) {
-                    alert("Please Enter only alphabets for username");
-                    document.form1.uname.focus();
+    <script>
+        function formValidation() {
+            var uid = document.form1.userid;
+            var passid = document.form1.passid;
+            var uname = document.form1.username;
+            var uemail = document.form1.email;
+            var umsex = document.form1.msex;
+            var ufsex = document.form1.fsex;
+
+            if (userid_validation(uid, 5, 12)) {
+                if (userid_validation(passid, 7, 12)) {
+                    if (allLetter(uname)) {
+                        if (ValidateEmail(uemail)) {
+                            if (validsex(umsex, ufsex)) {
+                                return true;  
+                            }
+                        }
+                    }
                 }
             }
-            return false;
+            return false; 
         }
-        function isEmpty(elem) {
-            if (elem.value.length == 0) {
-                return true;
+        function userid_validation(uid, mx, my) {
+            var uid_len = uid.value.length;
+            if (uid_len == 0 || uid_len >= my || uid_len < mx) {
+                alert("User ID should not be empty and length should be between " + mx + " to " + my);
+                uid.focus();
+                return false;
             }
-            return false;
+            return true;
         }
-        function isAlphabet(elem) {
-            var alphaExp = /^[a-z A-Z]+$/;
-            if (elem.value.match(alphaExp)) {
+        function allLetter(uname) {
+            var letters = /^[A-Za-z]+$/;
+            if (uname.value.match(letters)) {
+                return true;
+            } else {
+                alert('Username must have alphabet characters only.');
+                uname.focus();
+                return false;
+            }
+        }
+        function ValidateEmail(uemail) {
+            var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+            if (uemail.value.match(mailformat)) {
+                return true;
+            } else {
+                alert("You have entered an invalid email address!");
+                uemail.focus();
+                return false;
+            }
+        }
+        function validsex(umsex, ufsex) {
+            var x = 0;
+            if (umsex.checked) {
+                x++;
+            }
+            if (ufsex.checked) {
+                x++;
+            }
+            if (x == 0) {
+                alert('Select Male/Female');
+                umsex.focus();
+                return false;
+            } else {
                 return true;
             }
         }
@@ -44,6 +75,25 @@
 </head>
 
 <body>
-   
+    <h2>Registration Form</h2>
+    <form name="form1" onsubmit="return formValidation();">
+        <label for="userid">User ID:</label>
+        <input type="text" name="userid" id="userid"><br><br>
+
+        <label for="passid">Password:</label>
+        <input type="password" name="passid" id="passid"><br><br>
+
+        <label for="username">Username:</label>
+        <input type="text" name="username" id="username"><br><br>
+
+        <label for="email">Email:</label>
+        <input type="text" name="email" id="email"><br><br>
+
+        <label>Gender:</label>
+        <input type="radio" name="msex" value="Male"> Male
+        <input type="radio" name="fsex" value="Female"> Female<br><br>
+
+        <input type="submit" value="Submit">
+    </form>
 </body>
 </html>
